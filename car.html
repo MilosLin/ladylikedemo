@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABI Travel 包車服務</title>
+    <!-- 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 載入 Lucide Icons (用於圖示) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* 使用 Inter 字體 */
+        :root {
+            font-family: 'Inter', sans-serif;
+        }
+        /* 定義主色調 */
+        .color-primary { @apply bg-blue-600 text-white; }
+        .color-accent { @apply bg-orange-500 text-white; }
+        .card-shadow { @apply shadow-lg hover:shadow-xl transition-shadow duration-300; }
+
+        /* 讓 Lucide icons 渲染 */
+        [lucide] {
+            stroke-width: 1.5;
+        }
+
+        /* Hero 區塊背景效果 */
+        #chartered-hero {
+            background-image: url('https://placehold.co/1920x500/003366/ffffff?text=Private+Charter+Service+Banner');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* 服務卡片專用樣式 */
+        .feature-card {
+            @apply bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-500 transition-transform duration-300 hover:scale-[1.02];
+        }
+
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- 1. Header (頂部固定) - 與首頁保持一致 -->
+    <header id="header" class="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex justify-between items-center h-16">
+
+                <!-- Logo (左上) -->
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-blue-600">TABI <span class="text-orange-500">Travel</span></span>
+                </div>
+
+                <!-- 主導覽列 (桌面版) -->
+                <nav class="hidden lg:flex space-x-8 text-sm font-medium">
+                    <a href="./travel_homepage_mockup.html" class="hover:text-blue-600 transition duration-150">首頁</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">找飯店</a>
+                    <a href="./car.html" class="text-blue-600 font-bold border-b-2 border-blue-600 pb-1">包車</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">一日遊</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">團體行程</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">網卡</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">VIP專區</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">任務牆</a>
+                </nav>
+
+                <!-- 右上角圖示與入口 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 登入/註冊 -->
+                    <button class="hidden sm:block text-sm text-gray-600 hover:text-blue-600 font-medium">登入 / 註冊</button>
+                    <!-- 語系切換 -->
+                    <button class="text-gray-600 hover:text-blue-600" aria-label="Language Switch">
+                        <i lucide="globe" class="w-5 h-5"></i>
+                    </button>
+                    <!-- 購物車 -->
+                    <button class="relative text-gray-600 hover:text-blue-600" aria-label="Shopping Cart">
+                        <i lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span class="absolute top-[-8px] right-[-8px] text-xs font-bold w-4 h-4 bg-orange-500 text-white rounded-full flex items-center justify-center">3</span>
+                    </button>
+                    <!-- 會員中心入口 -->
+                    <button class="text-gray-600 hover:text-blue-600" aria-label="Member Center">
+                        <i lucide="user-circle" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="h-20"></div> <!-- 佔位符 -->
+
+    <main>
+        <!-- 2. Hero 區塊 - 包車服務主打 -->
+        <section id="chartered-hero" class="relative py-24 mb-12">
+            <div class="absolute inset-0 bg-black opacity-40"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="max-w-3xl text-white">
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">專屬您的私人包車服務</h1>
+                    <p class="text-xl opacity-90 mb-8 drop-shadow-md">無論商務接送、機場接駁，還是一日深度旅遊，我們提供最舒適、彈性的移動方案。</p>
+                </div>
+                
+                <!-- 包車預訂表單 (置於 Hero 區塊內，更醒目) -->
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl max-w-5xl">
+                    <!-- 服務模式切換 -->
+                    <div class="flex space-x-3 mb-6 font-semibold">
+                        <!-- 當前選中的模式 -->
+                        <button id="mode-point" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-full transition duration-150 shadow-md" onclick="setMode('point')">
+                            <i lucide="car" class="w-5 h-5 mr-2"></i> 點對點接送
+                        </button>
+                        <button id="mode-hourly" class="flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-150" onclick="setMode('hourly')">
+                            <i lucide="calendar-days" class="w-5 h-5 mr-2"></i> 時租包車
+                        </button>
+                        <button id="mode-airport" class="flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-150 hidden sm:flex" onclick="setMode('airport')">
+                            <i lucide="plane" class="w-5 h-5 mr-2"></i> 機場接送
+                        </button>
+                    </div>
+
+                    <!-- 預訂表單項目容器 -->
+                    <div id="booking-form-container" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <!-- 點對點模式 (預設顯示) -->
+                        <input type="text" id="pickup-location" placeholder="上車地點 (城市/飯店)" class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm" />
+                        <input type="text" id="dropoff-location" placeholder="下車地點 (城市/景點)" class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm" />
+                        
+                        <input type="text" id="travel-date" placeholder="出發日期" onfocus="(this.type='date')" onblur="(this.type='text')" class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm" />
+                        
+                        <div class="flex gap-2">
+                             <select id="passenger-count" class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm">
+                                <option value="" disabled selected>人數</option>
+                                <option value="1">1 人</option>
+                                <option value="2">2 人</option>
+                                <option value="3">3 人</option>
+                                <option value="4">4 人</option>
+                                <option value="5">5+ 人</option>
+                            </select>
+                            <button id="search-button" class="w-1/2 flex items-center justify-center color-accent px-4 py-3 rounded-lg font-semibold hover:bg-orange-600 transition" onclick="submitSearch()">
+                                <i lucide="search" class="w-5 h-5"></i> 
+                            </button>
+                        </div>
+                    </div>
+                    <p id="mode-info" class="text-xs text-gray-500 mt-3">* 點對點接送為固定價格，時租包車會依時間及里程計費。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 服務特色/優勢 -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+            <h2 class="text-3xl font-bold mb-10 text-center">我們的服務優勢</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 特色 1 -->
+                <div class="feature-card">
+                    <i lucide="users" class="w-10 h-10 text-blue-600 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">專業司機，安全可靠</h3>
+                    <p class="text-gray-600">所有司機皆具備多年駕駛經驗及當地嚮導知識，提供您安心舒適的旅程。</p>
+                </div>
+                <!-- 特色 2 -->
+                <div class="feature-card">
+                    <i lucide="key-round" class="w-10 h-10 text-blue-600 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">多元車型，彈性選擇</h3>
+                    <p class="text-gray-600">從高級轎車、七人座休旅車到九人座商務車，滿足各種人數與行李需求。</p>
+                </div>
+                <!-- 特色 3 -->
+                <div class="feature-card">
+                    <i lucide="clock" class="w-10 h-10 text-blue-600 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">24 小時客戶支援</h3>
+                    <p class="text-gray-600">全年無休的客服團隊，隨時為您處理訂單變動、突發狀況等問題。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 熱門包車路線 (預設一日遊模式) -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-center md:text-left">🗺️ 熱門包車一日遊路線</h2>
+            <div id="route-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 路線卡片 1 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg flex flex-col md:flex-row hover:shadow-xl transition duration-300">
+                    <img src="https://placehold.co/300x200/4B5563/ffffff?text=Taiwan+Route" onerror="this.onerror=null; this.src='https://placehold.co/300x200/4B5563/ffffff?text=Taiwan+Route';" alt="台灣經典路線" class="w-full md:w-1/3 h-48 md:h-auto object-cover">
+                    <div class="p-6 flex-grow">
+                        <span class="inline-block bg-orange-100 text-orange-600 text-xs font-medium px-2.5 py-0.5 rounded-full mb-2">台灣經典</span>
+                        <h3 class="text-xl font-bold mb-2">台北近郊：九份、平溪、野柳</h3>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">一天內暢遊東北角必去景點，專業司機帶您輕鬆打卡，無須煩惱交通接駁。</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-blue-600">NT$ 4,800 起</span>
+                            <button class="color-accent px-4 py-2 rounded-lg font-semibold text-sm hover:bg-orange-600 transition">
+                                立即預訂
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 路線卡片 2 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg flex flex-col md:flex-row hover:shadow-xl transition duration-300">
+                    <img src="https://placehold.co/300x200/4B5563/ffffff?text=Japan+Route" onerror="this.onerror=null; this.src='https://placehold.co/300x200/4B5563/ffffff?text=Japan+Route';" alt="日本經典路線" class="w-full md:w-1/3 h-48 md:h-auto object-cover">
+                    <div class="p-6 flex-grow">
+                        <span class="inline-block bg-blue-100 text-blue-600 text-xs font-medium px-2.5 py-0.5 rounded-full mb-2">日本推薦</span>
+                        <h3 class="text-xl font-bold mb-2">東京出發：富士山河口湖一日遊</h3>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">從東京飯店直達富士山五合目，VIP 專車讓您省去轉乘麻煩，享受純淨風景。</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-blue-600">NT$ 9,500 起</span>
+                            <button class="color-accent px-4 py-2 rounded-lg font-semibold text-sm hover:bg-orange-600 transition">
+                                立即預訂
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 路線卡片 3 (隱藏在手機上) -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg flex flex-col md:flex-row hover:shadow-xl transition duration-300 md:col-span-2 lg:col-span-1">
+                    <img src="https://placehold.co/300x200/4B5563/ffffff?text=Thailand+Route" onerror="this.onerror=null; this.src='https://placehold.co/300x200/4B5563/ffffff?text=Thailand+Route';" alt="泰國經典路線" class="w-full md:w-1/3 h-48 md:h-auto object-cover">
+                    <div class="p-6 flex-grow">
+                        <span class="inline-block bg-green-100 text-green-600 text-xs font-medium px-2.5 py-0.5 rounded-full mb-2">泰國推薦</span>
+                        <h3 class="text-xl font-bold mb-2">曼谷水上市場與鐵道市場包車</h3>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">體驗泰國獨特的水上文化，專車接送往返，省去公共交通的複雜與炎熱。</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-blue-600">NT$ 3,999 起</span>
+                            <button class="color-accent px-4 py-2 rounded-lg font-semibold text-sm hover:bg-orange-600 transition">
+                                立即預訂
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 更多路線按鈕 -->
+            <div class="text-center mt-8">
+                <button class="bg-blue-100 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-200 transition duration-150">
+                    查看所有包車路線
+                </button>
+            </div>
+        </section>
+
+             <!-- 4. 特色服務推廣 (包車服務廣告區) -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+            <div class="bg-blue-600 text-white rounded-xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between">
+                <div class="md:max-w-xl mb-6 md:mb-0">
+                    <h2 class="text-3xl font-bold mb-3">🚗 專屬包車服務：移動的舒適頭等艙</h2>
+                    <p class="text-lg opacity-90">提供專業司機、多元車款，從機場接送到城市深度旅遊，讓您享受無壓力的自由行。</p>
+                </div>
+                <a href="./car.html" class="color-accent px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition shadow-lg">
+                    立即查看包車方案 <i lucide="arrow-right" class="w-4 h-4 inline ml-2"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- 5. 常見問題 (FAQ) -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-center">❓ 常見問題</h2>
+            <div class="space-y-4 max-w-4xl mx-auto">
+                <!-- FAQ 1 -->
+                <div class="bg-white rounded-lg shadow p-4">
+                    <details class="group">
+                        <summary class="flex justify-between items-center cursor-pointer font-semibold text-lg text-blue-600 list-none">
+                            包車費用包含哪些項目？
+                            <span class="group-open:rotate-180 transition duration-300">
+                                <i lucide="chevron-down" class="w-5 h-5"></i>
+                            </span>
+                        </summary>
+                        <p class="mt-2 text-gray-600 border-t pt-2 text-sm">
+                            費用包含車輛使用費、專業司機服務費、油費、過路費、乘客保險。不包含停車費、司機餐費/小費（若有）。
+                        </p>
+                    </details>
+                </div>
+                <!-- FAQ 2 -->
+                <div class="bg-white rounded-lg shadow p-4">
+                    <details class="group">
+                        <summary class="flex justify-between items-center cursor-pointer font-semibold text-lg text-blue-600 list-none">
+                            我可以自訂行程或景點嗎？
+                            <span class="group-open:rotate-180 transition duration-300">
+                                <i lucide="chevron-down" class="w-5 h-5"></i>
+                            </span>
+                        </summary>
+                        <p class="mt-2 text-gray-600 border-t pt-2 text-sm">
+                            可以，我們的時租包車服務支援完全自訂行程。您可以在預訂時提供詳細需求，客服將協助您確認路線。
+                        </p>
+                    </details>
+                </div>
+                <!-- FAQ 3 -->
+                <div class="bg-white rounded-lg shadow p-4">
+                    <details class="group">
+                        <summary class="flex justify-between items-center cursor-pointer font-semibold text-lg text-blue-600 list-none">
+                            如何確定適合我的車型？
+                            <span class="group-open:rotate-180 transition duration-300">
+                                <i lucide="chevron-down" class="w-5 h-5"></i>
+                            </span>
+                        </summary>
+                        <p class="mt-2 text-gray-600 border-t pt-2 text-sm">
+                            請根據您的乘客人數及行李件數來選擇。一般而言，5 人以下建議選擇 5-7 座車；6-8 人建議選擇 9 座商務車。
+                        </p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. 模態框 (用於顯示搜尋結果/錯誤訊息，取代 alert) -->
+        <div id="modal" class="fixed inset-0 bg-black/70 z-[100] flex items-center justify-center hidden">
+            <div class="bg-white rounded-xl shadow-2xl p-6 w-11/12 max-w-sm" onclick="event.stopPropagation()">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="modal-heading" class="text-xl font-bold text-blue-600">提示</h3>
+                    <button class="text-gray-600 hover:text-gray-900" onclick="closeModal()">
+                        <i lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <p id="modal-content" class="text-gray-700 mb-4"></p>
+                <button class="w-full color-accent py-2 rounded-lg font-semibold hover:bg-orange-600 transition" onclick="closeModal()">
+                    確認
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 7. Footer - 與首頁保持一致 -->
+    <footer class="bg-gray-900 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-gray-700 pb-8 mb-8">
+                <!-- 關於我們 -->
+                <div>
+                    <h4 class="font-bold mb-4 text-blue-400">關於 TABI Travel</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white">關於我們</a></li>
+                        <li><a href="#" class="hover:text-white">聯絡客服</a></li>
+                        <li><a href="#" class="hover:text-white">人才招募</a></li>
+                    </ul>
+                </div>
+                <!-- 服務條款 -->
+                <div>
+                    <h4 class="font-bold mb-4 text-blue-400">法律與政策</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white">隱私政策</a></li>
+                        <li><a href="#" class="hover:text-white">使用條款</a></li>
+                        <li><a href="#" class="hover:text-white">退款須知</a></li>
+                    </ul>
+                </div>
+                <!-- 社群連結 -->
+                <div class="col-span-2 md:col-span-1">
+                    <h4 class="font-bold mb-4 text-blue-400">追蹤我們</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white" aria-label="Facebook"><i lucide="facebook" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white" aria-label="Instagram"><i lucide="instagram" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white" aria-label="YouTube"><i lucide="youtube" class="w-6 h-6"></i></a>
+                    </div>
+                </div>
+                <!-- 語言切換 (Footer 備用) -->
+                <div class="col-span-2 md:col-span-1">
+                     <h4 class="font-bold mb-4 text-blue-400">語言切換</h4>
+                    <select class="bg-gray-700 text-white p-2 rounded-lg text-sm w-full">
+                        <option>繁體中文 (TW)</option>
+                        <option>English (US)</option>
+                        <option>日本語 (JP)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 版權宣告 -->
+            <div class="text-center text-sm text-gray-500">
+                &copy; TABI Travel 2025. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- 8. 浮動功能列 (Floating Action Bar - FAB) -->
+    <div class="fixed bottom-6 right-6 z-40 space-y-3">
+        <!-- LINE 客服 -->
+        <a href="#" class="block color-accent w-12 h-12 rounded-full shadow-2xl flex items-center justify-center hover:bg-orange-600 transition duration-300" aria-label="LINE客服">
+            <i lucide="message-circle" class="w-6 h-6"></i>
+        </a>
+        <!-- 即時諮詢 -->
+        <a href="#" class="block bg-blue-600 w-12 h-12 rounded-full shadow-2xl flex items-center justify-center hover:bg-blue-700 transition duration-300" aria-label="即時諮詢">
+            <i lucide="phone-call" class="w-6 h-6"></i>
+        </a>
+        <!-- 回到頂端 -->
+        <a href="#header" class="block bg-gray-500 w-12 h-12 rounded-full shadow-2xl flex items-center justify-center hover:bg-gray-600 transition duration-300" aria-label="回到頂端">
+            <i lucide="arrow-up" class="w-6 h-6 text-white"></i>
+        </a>
+    </div>
+
+    <script>
+        // 初始化 Lucide icons
+        lucide.createIcons();
+
+        let currentMode = 'point'; // 預設模式：點對點接送
+
+        // 顯示模態框 (取代 alert/confirm)
+        function showModal(title, content) {
+            document.getElementById('modal-heading').textContent = title;
+            document.getElementById('modal-content').textContent = content;
+            document.getElementById('modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 關閉模態框
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        
+        // 切換服務模式
+        function setMode(mode) {
+            currentMode = mode;
+            const modes = ['point', 'hourly', 'airport'];
+            const container = document.getElementById('booking-form-container');
+            const infoText = document.getElementById('mode-info');
+            
+            // 處理按鈕樣式
+            modes.forEach(m => {
+                const btn = document.getElementById(`mode-${m}`);
+                if (btn) {
+                    if (m === mode) {
+                        btn.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                        btn.classList.add('bg-blue-600', 'text-white', 'shadow-md');
+                    } else {
+                        btn.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                        btn.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
+                    }
+                }
+            });
+
+            // 處理表單欄位和提示文字
+            if (mode === 'point') {
+                container.innerHTML = `
+                    <input type="text" id="pickup-location" placeholder="上車地點 (城市/飯店)" class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm" />
+                    <input type="text" id="dropoff-location" placeholder="下車地點 (城市/景點)" class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm" />
+                    <input type="text" id="travel-date" placeholder="出發日期" onfocus="(this.type='date')" onblur="(this.type='text')" class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm" />
+                    <div class="flex gap-2">
+                        <select id="passenger-count" class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm">
+                            <option value="" disabled selected>人數</option>
+                            <option value="1">1 人</option>
+                            <option value="2">2 人</option>
+                            <option value="3">3 人</option>
+                            <option value="4">4 人</option>
+                            <option value="5">5+ 人</option>
+                        </select>
+                        <button id="search-button" class="w-1/2 flex items-center justify-center color-accent px-4 py-3 rounded-lg font-semibold hover:bg-orange-600 transition" onclick="submitSearch()">
+                            <i lucide="search" class="w-5 h-5"></i> 
+                        </button>
+                    </div>
+                `;
+                infoText.textContent = '* 點對點接送為固定價格，時租包車會依時間及里程計費。';
+            } else if (mode === 'hourly') {
+                container.innerHTML = `
+                    <input type="text" id="hourly-area" placeholder="包車地區 (城市)" class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm col-span-2 md:col-span-1" />
+                    <input type="number" id="hourly-duration" placeholder="預計時數 (8小時起)" min="8" class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm" />
+                    <input type="text" id="travel-date" placeholder="出發日期" onfocus="(this.type='date')" onblur="(this.type='text')" class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm" />
+                    <div class="flex gap-2">
+                        <select id="passenger-count" class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm">
+                            <option value="" disabled selected>人數</option>
+                            <option value="1">1 人</option>
+                            <option value="2">2 人</option>
+                            <option value="3">3 人</option>
+                            <option value="4">4 人</option>
+                            <option value="5">5+ 人</option>
+                        </select>
+                        <button id="search-button" class="w-1/2 flex items-center justify-center color-accent px-4 py-3 rounded-lg font-semibold hover:bg-orange-600 transition" onclick="submitSearch()">
+                            <i lucide="search" class="w-5 h-5"></i> 
+                        </button>
+                    </div>
+                `;
+                infoText.textContent = '* 時租包車價格包含固定時數與基本里程，超時費另計，建議時數 8 小時以上。';
+            } else if (mode === 'airport') {
+                container.innerHTML = `
+                    <select id="airport-type" class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm">
+                        <option value="pickup" selected>機場接機</option>
+                        <option value="dropoff">送機服務</option>
+                    </select>
+                    <input type="text" id="airport-name" placeholder="機場名稱/代碼" class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm" />
+                    <input type="text" id="travel-date" placeholder="出發日期/時間" onfocus="(this.type='datetime-local')" onblur="(this.type='text')" class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm" />
+                    <div class="flex gap-2">
+                        <select id="passenger-count" class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 text-sm">
+                            <option value="" disabled selected>人數</option>
+                            <option value="1">1 人</option>
+                            <option value="2">2 人</option>
+                            <option value="3">3 人</option>
+                            <option value="4">4 人</option>
+                            <option value="5">5+ 人</option>
+                        </select>
+                        <button id="search-button" class="w-1/2 flex items-center justify-center color-accent px-4 py-3 rounded-lg font-semibold hover:bg-orange-600 transition" onclick="submitSearch()">
+                            <i lucide="search" class="w-5 h-5"></i> 
+                        </button>
+                    </div>
+                `;
+                infoText.textContent = '* 機場接送價格包含 60-90 分鐘免費等候時間。請提供航班資訊以便追蹤。';
+            }
+            // 確保每次 DOM 結構改變後，Lucide icons 都會重新渲染
+            lucide.createIcons();
+        }
+
+        // 處理表單提交
+        function submitSearch() {
+            let message = '';
+            let isError = false;
+
+            // 簡易表單驗證 (僅檢查日期和人數，實際應用需更嚴謹)
+            const dateInput = document.getElementById('travel-date').value;
+            const passengerCount = document.getElementById('passenger-count').value;
+
+            if (!dateInput || !passengerCount) {
+                message = '請至少填寫出發日期與人數，以利查詢。';
+                isError = true;
+            } else {
+                if (currentMode === 'point') {
+                    const pickup = document.getElementById('pickup-location').value;
+                    const dropoff = document.getElementById('dropoff-location').value;
+                    if (!pickup || !dropoff) {
+                        message = '點對點接送，請務必填寫上車與下車地點。';
+                        isError = true;
+                    } else {
+                        message = `查詢成功！[${currentMode}] 路線：從 ${pickup} 到 ${dropoff}，日期：${dateInput}，人數：${passengerCount}。`;
+                    }
+                } else if (currentMode === 'hourly') {
+                    const area = document.getElementById('hourly-area').value;
+                    const duration = document.getElementById('hourly-duration').value;
+                    if (!area || !duration) {
+                        message = '時租包車請填寫包車地區與時數。';
+                        isError = true;
+                    } else {
+                        message = `查詢成功！[${currentMode}] 路線：${area} 包車 ${duration} 小時，日期：${dateInput}，人數：${passengerCount}。`;
+                    }
+                } else if (currentMode === 'airport') {
+                     const airport = document.getElementById('airport-name').value;
+                     const type = document.getElementById('airport-type').value;
+                    if (!airport) {
+                        message = '機場接送請填寫機場名稱。';
+                        isError = true;
+                    } else {
+                        message = `查詢成功！[${currentMode}] 服務：${type === 'pickup' ? '接機' : '送機'} ${airport}，時間：${dateInput}，人數：${passengerCount}。`;
+                    }
+                }
+            }
+            
+            showModal(isError ? '查詢錯誤' : '正在為您尋找車輛', message);
+        }
+
+        // 初始化頁面時設定預設模式
+        window.onload = function() {
+            setMode('point');
+             // 確保每次 DOM 結構改變後，Lucide icons 都會重新渲染
+            lucide.createIcons(); 
+        };
+        
+        // Header 黏貼效果 (可選)
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-xl', 'bg-white/95', 'backdrop-blur-sm');
+                header.classList.remove('shadow-md');
+            } else {
+                header.classList.remove('shadow-xl', 'bg-white/95', 'backdrop-blur-sm');
+                header.classList.add('shadow-md');
+            }
+        });
+    </script>
+</body>
+</html>
