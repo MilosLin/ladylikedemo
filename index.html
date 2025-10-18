@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABI Travel 旅遊網頁首頁示意圖</title>
+    <!-- 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 載入 Lucide Icons (用於圖示) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* 使用 Inter 字體 */
+        :root {
+            font-family: 'Inter', sans-serif;
+        }
+        /* 增加平滑滾動 */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* 定義主色調 */
+        .color-primary { @apply bg-blue-600 text-white; }
+        .color-accent { @apply bg-orange-500 text-white; }
+        .card-shadow { @apply shadow-lg hover:shadow-xl transition-shadow duration-300; }
+
+        /* 讓 Lucide icons 渲染 */
+        [lucide] {
+            stroke-width: 1.5;
+        }
+
+        /* 針對影片牆卡片的直立比例 */
+        .vertical-video-card {
+            aspect-ratio: 9/16;
+        }
+
+        /* Hero 區塊背景效果 */
+        #hero-section {
+            background-image: url('https://placehold.co/1920x600/1E3A8A/ffffff?text=Travel+Theme+Banner');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* [移除]: 舊的 .modal-hidden 樣式，改用 Tailwind 的 'hidden' 類別 */
+
+        /* 響應式搜尋列調整 */
+        @media (max-width: 1024px) {
+            #main-search-bar {
+                display: none; /* 在移動設備上隱藏主 Header 搜尋列，避免重複 */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- 1. Header (頂部固定) -->
+    <header id="header" class="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex justify-between items-center h-16">
+
+                <!-- Logo (左上) -->
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-blue-600">TABI <span class="text-orange-500">Travel</span></span>
+                </div>
+
+                <!-- 主導覽列 (桌面版) -->
+                <nav class="hidden lg:flex space-x-8 text-sm font-medium">
+                    <a href="#" class="text-blue-600 font-bold border-b-2 border-blue-600 pb-1">首頁</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">找飯店</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">包車</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">一日遊</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">團體行程</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">網卡</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">VIP專區</a>
+                    <a href="#" class="hover:text-blue-600 transition duration-150">任務牆</a>
+                </nav>
+
+                <!-- 右上角圖示與入口 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 登入/註冊 -->
+                    <button class="hidden sm:block text-sm text-gray-600 hover:text-blue-600 font-medium">登入 / 註冊</button>
+                    <!-- 語系切換 -->
+                    <button class="text-gray-600 hover:text-blue-600" aria-label="Language Switch">
+                        <i lucide="globe" class="w-5 h-5"></i>
+                    </button>
+                    <!-- 購物車 -->
+                    <button class="relative text-gray-600 hover:text-blue-600" aria-label="Shopping Cart">
+                        <i lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span class="absolute top-[-8px] right-[-8px] text-xs font-bold w-4 h-4 bg-orange-500 text-white rounded-full flex items-center justify-center">3</span>
+                    </button>
+                    <!-- 會員中心入口 -->
+                    <button class="text-gray-600 hover:text-blue-600" aria-label="Member Center">
+                        <i lucide="user-circle" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 搜尋列 (桌面版，用於展示) -->
+            <div id="main-search-bar" class="hidden lg:flex py-3 -mt-1">
+                <div class="flex w-full bg-gray-100 rounded-xl p-2 shadow-inner border border-gray-200">
+                    <input type="text" placeholder="目的地 (城市、國家)" class="flex-grow p-2 bg-transparent focus:outline-none placeholder-gray-500 text-sm rounded-l-lg" />
+                    <input type="text" placeholder="入住 / 退房日期" onfocus="(this.type='date')" onblur="(this.type='text')" class="p-2 w-48 bg-transparent focus:outline-none placeholder-gray-500 text-sm" />
+                    <input type="number" placeholder="人數" min="1" class="p-2 w-24 bg-transparent focus:outline-none placeholder-gray-500 text-sm" />
+                    <button class="flex items-center justify-center color-accent px-6 rounded-lg text-sm font-semibold ml-2 hover:bg-orange-600 transition">
+                        <i lucide="search" class="w-4 h-4 mr-2"></i> 搜尋
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="h-32 lg:h-40"></div> <!-- 佔位符，避免內容被 Header 遮擋 -->
+
+    <main>
+        <!-- 2. Hero 區塊 -->
+        <section id="hero-section" class="relative py-24 md:py-36 mb-12">
+            <div class="absolute inset-0 bg-black opacity-30"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6 drop-shadow-lg">探索世界，開啟您的下一段旅程</h1>
+
+                <!-- Hero 區塊搜尋框 (行動版主要搜尋框) -->
+                <div class="bg-white p-4 md:p-6 rounded-xl shadow-2xl max-w-4xl mx-auto">
+                    <div class="flex flex-wrap md:flex-nowrap gap-3">
+                        <input type="text" placeholder="目的地 (城市、國家)" class="w-full md:flex-grow p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm" />
+                        <input type="text" placeholder="日期" onfocus="(this.type='date')" onblur="(this.type='text')" class="w-full md:w-1/3 p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm" />
+                        <input type="number" placeholder="人數" min="1" class="w-full md:w-24 p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm" />
+                        <button class="w-full md:w-auto flex items-center justify-center color-accent px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition">
+                            <i lucide="search" class="w-5 h-5 md:mr-1"></i> 
+                            <span class="hidden md:inline">搜尋</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 熱門目的地按鈕 -->
+                <div class="mt-8 flex justify-center flex-wrap gap-2 md:gap-4">
+                    <span class="text-white text-sm font-medium mr-2 hidden sm:block">熱門：</span>
+                    <button class="bg-white/90 text-gray-800 text-sm px-4 py-2 rounded-full hover:bg-white transition duration-150 shadow-md">台灣</button>
+                    <button class="bg-white/90 text-gray-800 text-sm px-4 py-2 rounded-full hover:bg-white transition duration-150 shadow-md">日本</button>
+                    <button class="bg-white/90 text-gray-800 text-sm px-4 py-2 rounded-full hover:bg-white transition duration-150 shadow-md">韓國</button>
+                    <button class="bg-white/90 text-gray-800 text-sm px-4 py-2 rounded-full hover:bg-white transition duration-150 shadow-md">泰國</button>
+                    <button class="bg-white/90 text-gray-800 text-sm px-4 py-2 rounded-full hover:bg-white transition duration-150 shadow-md hidden sm:block">歐洲</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 推薦區塊 - 熱門活動卡片牆 -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-center md:text-left">🔥 熱門活動推薦</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- 活動卡片 1 -->
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <img src="https://placehold.co/400x300/F97316/ffffff?text=Activity+1" alt="活動圖片" class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <p class="text-xs text-gray-500 mb-1 flex items-center"><i lucide="map-pin" class="w-3 h-3 mr-1"></i> 台北 | 台灣</p>
+                        <h3 class="font-semibold text-base mb-2 truncate">九份老街與平溪天燈一日遊</h3>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-orange-500">NT$ 1,500</span>
+                            <span class="text-xs text-yellow-500 font-bold flex items-center">
+                                <i lucide="star" class="w-3 h-3 fill-yellow-500 mr-1"></i> 4.8 (888)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 活動卡片 2 -->
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <img src="https://placehold.co/400x300/06B6D4/ffffff?text=Activity+2" alt="活動圖片" class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <p class="text-xs text-gray-500 mb-1 flex items-center"><i lucide="map-pin" class="w-3 h-3 mr-1"></i> 東京 | 日本</p>
+                        <h3 class="font-semibold text-base mb-2 truncate">富士山經典景點一日遊</h3>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-orange-500">NT$ 3,200</span>
+                            <span class="text-xs text-yellow-500 font-bold flex items-center">
+                                <i lucide="star" class="w-3 h-3 fill-yellow-500 mr-1"></i> 4.9 (1.2K)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 活動卡片 3 -->
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <img src="https://placehold.co/400x300/10B981/ffffff?text=Activity+3" alt="活動圖片" class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <p class="text-xs text-gray-500 mb-1 flex items-center"><i lucide="map-pin" class="w-3 h-3 mr-1"></i> 釜山 | 韓國</p>
+                        <h3 class="font-semibold text-base mb-2 truncate">海東龍宮寺與海邊列車半日遊</h3>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-orange-500">NT$ 1,850</span>
+                            <span class="text-xs text-yellow-500 font-bold flex items-center">
+                                <i lucide="star" class="w-3 h-3 fill-yellow-500 mr-1"></i> 4.7 (540)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 活動卡片 4 -->
+                <div class="bg-white rounded-xl overflow-hidden card-shadow hidden lg:block">
+                    <img src="https://placehold.co/400x300/EC4899/ffffff?text=Activity+4" alt="活動圖片" class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <p class="text-xs text-gray-500 mb-1 flex items-center"><i lucide="map-pin" class="w-3 h-3 mr-1"></i> 清邁 | 泰國</p>
+                        <h3 class="font-semibold text-base mb-2 truncate">叢林飛索與大象保護營體驗</h3>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-orange-500">NT$ 2,550</span>
+                            <span class="text-xs text-yellow-500 font-bold flex items-center">
+                                <i lucide="star" class="w-3 h-3 fill-yellow-500 mr-1"></i> 5.0 (320)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 排行榜 (簡化呈現) -->
+            <div class="mt-12 bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <i lucide="trending-up" class="w-5 h-5 text-blue-600 mr-2"></i> 銷售排行榜 (本月)
+                </h3>
+                <div class="flex space-x-4 border-b pb-2 mb-4 text-sm font-medium">
+                    <button class="text-blue-600 border-b-2 border-blue-600 pb-1">熱門度</button>
+                    <button class="text-gray-500 hover:text-blue-600">銷售量</button>
+                </div>
+                <ul class="space-y-3">
+                    <li class="flex justify-between items-center text-gray-700"><span class="font-bold text-orange-500 mr-2">#1</span> 九份老街與平溪天燈一日遊 <span class="text-sm">已售出 2000+</span></li>
+                    <li class="flex justify-between items-center text-gray-700"><span class="font-bold text-orange-500 mr-2">#2</span> 富士山經典景點一日遊 <span class="text-sm">已售出 1500+</span></li>
+                    <li class="flex justify-between items-center text-gray-700"><span class="font-bold text-orange-500 mr-2">#3</span> 歐洲之星跨國鐵路通行證 <span class="text-sm">已售出 1200+</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 4. 最新優惠 Banner Carousel (Placeholder) -->
+        <section class="mb-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold mb-6 text-center md:text-left">💰 最新優惠</h2>
+                <div class="bg-blue-900 rounded-xl overflow-hidden h-40 md:h-64 flex items-center justify-center text-white text-2xl font-bold shadow-2xl">
+                    <!-- 此處為 Banner Carousel 佔位 -->
+                     - 點擊切換促銷活動
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 影片牆區塊 (Video Wall) -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-center md:text-left">🎬 旅遊 Vlog / 活動花絮</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- 直式短影片卡片 -->
+                <div class="relative rounded-xl overflow-hidden card-shadow vertical-video-card bg-gray-200 cursor-pointer" onclick="showVideoModal('影片 1: 歐洲火車之旅')">
+                    <img src="https://placehold.co/200x350/FACC15/000000?text=Vlog+1" alt="Vlog 預覽" class="w-full h-full object-cover opacity-80">
+                    <div class="absolute inset-0 flex flex-col justify-center items-center p-3 text-white">
+                        <div class="p-3 bg-black/50 rounded-full mb-2">
+                            <i lucide="play" class="w-6 h-6 fill-white"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-center mt-2 drop-shadow-lg">歐洲火車之旅</p>
+                    </div>
+                </div>
+                <div class="relative rounded-xl overflow-hidden card-shadow vertical-video-card bg-gray-200 cursor-pointer" onclick="showVideoModal('影片 2: 泰國美食探險')">
+                    <img src="https://placehold.co/200x350/8B5CF6/000000?text=Vlog+2" alt="Vlog 預覽" class="w-full h-full object-cover opacity-80">
+                    <div class="absolute inset-0 flex flex-col justify-center items-center p-3 text-white">
+                        <div class="p-3 bg-black/50 rounded-full mb-2">
+                            <i lucide="play" class="w-6 h-6 fill-white"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-center mt-2 drop-shadow-lg">泰國美食探險</p>
+                    </div>
+                </div>
+                 <div class="relative rounded-xl overflow-hidden card-shadow vertical-video-card bg-gray-200 cursor-pointer" onclick="showVideoModal('影片 3: 露營車環島')">
+                    <img src="https://placehold.co/200x350/059669/000000?text=Vlog+3" alt="Vlog 預覽" class="w-full h-full object-cover opacity-80">
+                    <div class="absolute inset-0 flex flex-col justify-center items-center p-3 text-white">
+                        <div class="p-3 bg-black/50 rounded-full mb-2">
+                            <i lucide="play" class="w-6 h-6 fill-white"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-center mt-2 drop-shadow-lg">露營車環島</p>
+                    </div>
+                </div>
+                 <div class="relative rounded-xl overflow-hidden card-shadow vertical-video-card bg-gray-200 cursor-pointer hidden md:block" onclick="showVideoModal('影片 4: 日本賞櫻')">
+                    <img src="https://placehold.co/200x350/F43F5E/000000?text=Vlog+4" alt="Vlog 預覽" class="w-full h-full object-cover opacity-80">
+                    <div class="absolute inset-0 flex flex-col justify-center items-center p-3 text-white">
+                        <div class="p-3 bg-black/50 rounded-full mb-2">
+                            <i lucide="play" class="w-6 h-6 fill-white"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-center mt-2 drop-shadow-lg">日本賞櫻</p>
+                    </div>
+                </div>
+                <div class="relative rounded-xl overflow-hidden card-shadow vertical-video-card bg-gray-200 cursor-pointer hidden lg:block" onclick="showVideoModal('影片 5: 韓國夜市')">
+                    <img src="https://placehold.co/200x350/3B82F6/000000?text=Vlog+5" alt="Vlog 預覽" class="w-full h-full object-cover opacity-80">
+                    <div class="absolute inset-0 flex flex-col justify-center items-center p-3 text-white">
+                        <div class="p-3 bg-black/50 rounded-full mb-2">
+                            <i lucide="play" class="w-6 h-6 fill-white"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-center mt-2 drop-shadow-lg">韓國夜市</p>
+                    </div>
+                </div>
+                <div class="relative rounded-xl overflow-hidden card-shadow vertical-video-card bg-gray-200 cursor-pointer hidden lg:block" onclick="showVideoModal('影片 6: 冰島極光')">
+                    <img src="https://placehold.co/200x350/9333EA/000000?text=Vlog+6" alt="Vlog 預覽" class="w-full h-full object-cover opacity-80">
+                    <div class="absolute inset-0 flex flex-col justify-center items-center p-3 text-white">
+                        <div class="p-3 bg-black/50 rounded-full mb-2">
+                            <i lucide="play" class="w-6 h-6 fill-white"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-center mt-2 drop-shadow-lg">冰島極光</p>
+                    </div>
+                </div>
+                <!-- 更多卡片... -->
+            </div>
+        </section>
+
+        <!-- 影片播放 Lightbox 彈窗 (使用 Tailwind 的 'hidden' 類別) -->
+        <div id="video-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center hidden">
+            <!-- 內部彈窗內容，保留 event.stopPropagation() 以防止點擊內容關閉彈窗 -->
+            <div class="bg-white rounded-xl shadow-2xl p-6 w-11/12 max-w-3xl" onclick="event.stopPropagation()">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="modal-title" class="text-xl font-bold">影片標題</h3>
+                    <button class="text-gray-600 hover:text-gray-900" onclick="hideVideoModal()">
+                        <i lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <!-- 影片播放器佔位 -->
+                <div class="aspect-video bg-gray-800 rounded-lg flex items-center justify-center text-white">
+                    [Video Player Placeholder]
+                </div>
+                <p class="text-sm text-gray-500 mt-3">此為影片播放示意圖，點擊外部區域可關閉彈窗。</p>
+            </div>
+        </div>
+
+        <!-- 6. VIP / LikePoint 區塊 -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-center md:text-left">💎 會員專屬：VIP 與 LikePoint</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- VIP 卡片 1 (當前等級) -->
+                <div class="bg-blue-600 p-6 rounded-xl text-white shadow-xl border-b-4 border-yellow-400">
+                    <h3 class="text-lg font-semibold mb-1">您的等級：VIP 金</h3>
+                    <p class="text-sm opacity-90">享有訂單 95 折與生日禮。</p>
+                </div>
+                <!-- VIP 卡片 2 -->
+                <div class="bg-gray-700 p-6 rounded-xl text-white opacity-70">
+                    <h3 class="text-lg font-semibold mb-1">升級目標：VIP 白金</h3>
+                    <p class="text-sm">消費滿 $50,000 即可達成。</p>
+                </div>
+                <!-- VIP 卡片 3 -->
+                <div class="bg-gray-800 p-6 rounded-xl text-white opacity-50 hidden md:block">
+                    <h3 class="text-lg font-semibold mb-1">最高等級：VIP 黑鑽</h3>
+                    <p class="text-sm">專屬管家與無限次貴賓室。</p>
+                </div>
+            </div>
+
+            <!-- 點數累積進度條 -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div>
+                    <h3 class="text-xl font-bold mb-2">您的 LikePoint 點數</h3>
+                    <p class="text-3xl font-extrabold text-orange-500 mb-4 md:mb-0">1,500 點</p>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <div class="flex justify-between text-sm font-medium mb-1">
+                        <span>距離下一級：還差 3,500 點</span>
+                        <span>30%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="bg-blue-600 h-3 rounded-full" style="width: 30%;"></div>
+                    </div>
+                </div>
+                <a href="#" class="color-accent px-6 py-2 rounded-lg font-semibold mt-4 md:mt-0 hover:bg-orange-600 transition">
+                    <i lucide="award" class="w-4 h-4 mr-1 inline"></i> 前往任務牆
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- 7. Footer -->
+    <footer class="bg-gray-900 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-gray-700 pb-8 mb-8">
+                <!-- 關於我們 -->
+                <div>
+                    <h4 class="font-bold mb-4 text-blue-400">關於 TABI Travel</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white">關於我們</a></li>
+                        <li><a href="#" class="hover:text-white">聯絡客服</a></li>
+                        <li><a href="#" class="hover:text-white">人才招募</a></li>
+                    </ul>
+                </div>
+                <!-- 服務條款 -->
+                <div>
+                    <h4 class="font-bold mb-4 text-blue-400">法律與政策</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white">隱私政策</a></li>
+                        <li><a href="#" class="hover:text-white">使用條款</a></li>
+                        <li><a href="#" class="hover:text-white">退款須知</a></li>
+                    </ul>
+                </div>
+                <!-- 社群連結 -->
+                <div class="col-span-2 md:col-span-1">
+                    <h4 class="font-bold mb-4 text-blue-400">追蹤我們</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white" aria-label="Facebook"><i lucide="facebook" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white" aria-label="Instagram"><i lucide="instagram" class="w-6 h-6"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white" aria-label="YouTube"><i lucide="youtube" class="w-6 h-6"></i></a>
+                    </div>
+                </div>
+                <!-- 語言切換 (Footer 備用) -->
+                <div class="col-span-2 md:col-span-1">
+                     <h4 class="font-bold mb-4 text-blue-400">語言切換</h4>
+                    <select class="bg-gray-700 text-white p-2 rounded-lg text-sm w-full">
+                        <option>繁體中文 (TW)</option>
+                        <option>English (US)</option>
+                        <option>日本語 (JP)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 版權宣告 -->
+            <div class="text-center text-sm text-gray-500">
+                &copy; TABI Travel 2025. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- 8. 浮動功能列 (Floating Action Bar - FAB) -->
+    <div class="fixed bottom-6 right-6 z-40 space-y-3">
+        <!-- LINE 客服 -->
+        <a href="#" class="block color-accent w-12 h-12 rounded-full shadow-2xl flex items-center justify-center hover:bg-orange-600 transition duration-300" aria-label="LINE客服">
+            <i lucide="message-circle" class="w-6 h-6"></i>
+        </a>
+        <!-- 即時諮詢 -->
+        <a href="#" class="block bg-blue-600 w-12 h-12 rounded-full shadow-2xl flex items-center justify-center hover:bg-blue-700 transition duration-300" aria-label="即時諮詢">
+            <i lucide="phone-call" class="w-6 h-6"></i>
+        </a>
+        <!-- 回到頂端 -->
+        <a href="#header" class="block bg-gray-500 w-12 h-12 rounded-full shadow-2xl flex items-center justify-center hover:bg-gray-600 transition duration-300" aria-label="回到頂端">
+            <i lucide="arrow-up" class="w-6 h-6 text-white"></i>
+        </a>
+    </div>
+
+    <script>
+        // 初始化 Lucide icons
+        lucide.createIcons();
+
+        // 影片播放彈窗邏輯
+        function showVideoModal(title) {
+            document.getElementById('modal-title').textContent = title;
+            // [修正]: 改用 Tailwind 的 'hidden' 類別
+            document.getElementById('video-modal').classList.remove('hidden'); 
+            document.body.style.overflow = 'hidden'; // 鎖定背景滾動
+        }
+
+        function hideVideoModal() {
+            // [修正]: 改用 Tailwind 的 'hidden' 類別
+            document.getElementById('video-modal').classList.add('hidden');
+            document.body.style.overflow = ''; // 恢復背景滾動
+        }
+
+        // 使用事件監聽器來處理彈窗外部點擊關閉
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoModal = document.getElementById('video-modal');
+            
+            // 監聽整個彈窗容器的點擊事件
+            if (videoModal) {
+                videoModal.addEventListener('click', (event) => {
+                    // 如果點擊目標就是彈窗容器本身 (即背景遮罩)，則關閉彈窗
+                    if (event.target === videoModal) {
+                        hideVideoModal();
+                    }
+                });
+            }
+        });
+
+
+        // Header 黏貼效果 (可選)
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-xl', 'bg-white/95', 'backdrop-blur-sm');
+                header.classList.remove('shadow-md');
+            } else {
+                header.classList.remove('shadow-xl', 'bg-white/95', 'backdrop-blur-sm');
+                header.classList.add('shadow-md');
+            }
+        });
+    </script>
+</body>
+</html>
